@@ -8,6 +8,10 @@ global.Modules = require('./modules');
 
 moduleList = ['Database', ...moduleList.map((elt) => 'modules/' + elt + '/main.server')];
 
+if(discordAdminId && discordBotToken) {
+	moduleList.unshift('Discord');
+}
+
 /**
  * Load
  */
@@ -36,6 +40,15 @@ if(debugMode) {
 
 autoLoad(function() {
 	log('SEEKING ADMIN ...');
+
+	if(discordAdminId && discordBotToken) {
+		Discord.connect(() => {
+			Discord.sendMessage(
+				'L.U.M.E.N online - awaiting orders'
+			);
+			log('ADMIN FOUND');
+		});
+	}
 });
 
 process.on('uncaughtException', err => {

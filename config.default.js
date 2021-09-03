@@ -28,6 +28,14 @@ global.databaseAuth = {
 };
 
 /**
+ * Discord
+ */
+//global.discordAdminId = '';
+
+// The token of your bot - https://discordapp.com/developers/applications/me
+//global.discordBotToken = '';
+
+/**
  * Modules
  */
 global.moduleList = [
