@@ -1,6 +1,6 @@
-const proc = require('child_process');
+import proc from 'child_process';
 
-module.exports = {
+export default {
 	/**
 	 * Invoke a Text to speech in powershell
 	 *

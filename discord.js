@@ -1,11 +1,13 @@
-global.discordClient = (typeof discordClient !== 'undefined') ? discordClient : new (require('discord.js')).Client();
+import { Client } from 'discord.js';
+
+global.discordClient = (typeof discordClient !== 'undefined') ? discordClient : new Client();
 global.discordAdmin = (typeof discordAdmin !== 'undefined') ? discordAdmin : null;
 
-module.exports = {
+export default class Discord {
 	/**
 	 * Connect to discord server, and listen messages
 	 */
-	connect: (callback) => {
+	static connect(callback) {
 		discordClient.on('ready', () => {
 			log('Connected to discord server bot');
 			discordClient.user.setActivity('Monitoring the world');
@@ -25,9 +27,9 @@ module.exports = {
 		discordClient.login(discordBotToken);
 
 		return discordClient;
-	},
+	}
 
-	sendMessage: (message, callback) => {
+	static sendMessage(message, callback) {
 		if(discordAdmin) {
 			discordAdmin.send(message);
 		}
@@ -35,16 +37,16 @@ module.exports = {
 		if(callback) {
 			callback();
 		}
-	},
-	recievedMessage: (message) => {
+	}
+	static recievedMessage(message) {
 		log('[Discord] ' + message.channel.recipient.username + ': ' + message.cleanContent);
 
 		if(message.cleanContent.charAt(0) === '!') {
 			Discord.sendCommand(message);
 		}
-	},
+	}
 
-	sendCommand: async (message) => {
+	static async sendCommand(message) {
 		const words = message.cleanContent.split(' ');
 		if(words[0] === '!pm') {
 			const recipient = await discordClient.fetchUser(words[1]);
@@ -57,4 +59,4 @@ module.exports = {
 			}
 		}
 	}
-};
+}

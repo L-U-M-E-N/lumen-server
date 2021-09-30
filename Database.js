@@ -1,9 +1,10 @@
-const { Pool } = require('pg');
+import pg from 'pg';
+const { Pool } = pg;
 
 global.dbPool = null;
 global.dbClient = null;
 
-module.exports = class Database {
+export default class Database {
 	static async init(callback) {
 		if(!!dbPool) { return; }
 

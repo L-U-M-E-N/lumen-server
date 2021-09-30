@@ -1,10 +1,12 @@
 /**
  * Modules
  */
-require('./console')();
-require('./config');
+import ConsoleHelper from './console.js';
+global.log = ConsoleHelper.log;
 
-global.Modules = require('./modules');
+import './config.js';
+
+import Modules from './modules.js';
 
 moduleList = ['Database', ...moduleList.map((elt) => 'modules/' + elt + '/main.server')];
 
@@ -29,7 +31,7 @@ async function autoLoad(callback) {
 	callback();
 }
 
-consoleReset();
+ConsoleHelper.consoleReset();
 
 // Autoloading modules
 log('./action.SYSTEM.REBOOT', 'boot');

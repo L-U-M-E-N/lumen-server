@@ -1,9 +1,9 @@
-const { spawn } = require('child_process');
-const fs = require('fs');
+import { spawn } from 'child_process';
+import fs from 'fs';
 
 global.childList = { };
 
-module.exports = class Modules {
+export default class Modules {
 	static loadSubprocess(i) {
 		if(typeof subprocessesList[i].init === 'function') {
 			subprocessesList[i].init();
@@ -47,10 +47,9 @@ module.exports = class Modules {
 				await global[moduleName].stop();
 			}
 
-			delete require.cache[require.resolve('./' + moduleName)];
 			delete global[moduleName];
 
-			global[moduleName] = require('./' + moduleName);
+			global[moduleName] = (await import('./' + moduleName + '.js?date=' + Date.now())).default; // TODO: find a better way, this isn't releasing memory ...
 
 			if(global[moduleName] && typeof global[moduleName].init === 'function') {
 				await global[moduleName].init();
