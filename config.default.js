@@ -34,6 +34,7 @@ global.databaseAuth = {
 
 // The token of your bot - https://discordapp.com/developers/applications/me
 //global.discordBotToken = '';
+//global.discordPMChannel = '';
 
 /**
  * Modules

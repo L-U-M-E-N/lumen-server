@@ -47,6 +47,10 @@ export default class Discord {
 	}
 
 	static async sendCommand(message) {
+		if(message.channel.id !== discordPMChannel) {
+			return;
+		}
+
 		const words = message.cleanContent.split(' ');
 		if(words[0] === '!pm') {
 			const recipient = await discordClient.fetchUser(words[1]);
