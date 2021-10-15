@@ -61,6 +61,23 @@ export default class Discord {
 
 				recipient.send(words.join(' '));
 			}
+		} else if(words[0] === '!delete') {
+			const foundMessage = await message.channel.messages.fetch(words[1]);
+
+			console.log('Deleting ', words[1], foundMessage);
+
+			if(foundMessage) {
+				foundMessage.delete();
+			}
+		} else if(words[0] === '!purge') {
+			let foundMessages = await message.channel.messages.fetch({ limit: 100 });
+			foundMessages = foundMessages.filter((elt) => elt.cleanContent === 'L.U.M.E.N online - awaiting orders');
+
+			console.log('Purging pm');
+
+			if(foundMessages) {
+				foundMessages.map((elt) => elt.delete());
+			}
 		}
 	}
 }
