@@ -8,11 +8,11 @@ export default class Discord {
 	 * Connect to discord server, and listen messages
 	 */
 	static connect(callback) {
-		discordClient.on('ready', () => {
+		discordClient.on('ready', async() => {
 			log('Connected to discord server bot');
 			discordClient.user.setActivity('Monitoring the world');
 
-			discordClient.fetchUser(discordAdminId)
+			discordClient.users.fetch(discordAdminId)
 				.then(user => {
 					discordAdmin = user;
 
@@ -53,13 +53,13 @@ export default class Discord {
 
 		const words = message.cleanContent.split(' ');
 		if(words[0] === '!pm') {
-			const recipient = await discordClient.fetchUser(words[1]);
+			const recipient = await discordClient.users.fetch(words[1]);
 
 			if(!!recipient) {
 				words.shift();
 				words.shift();
 
-				recipient.sendMessage(words.join(' '));
+				recipient.send(words.join(' '));
 			}
 		}
 	}
