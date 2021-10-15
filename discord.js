@@ -1,6 +1,6 @@
-import { Client } from 'discord.js';
+import DiscordJS from 'discord.js';
 
-global.discordClient = (typeof discordClient !== 'undefined') ? discordClient : new Client();
+global.discordClient = (typeof discordClient !== 'undefined') ? discordClient : new DiscordJS.Client({ intents: [DiscordJS.Intents.FLAGS.GUILDS, DiscordJS.Intents.FLAGS.DIRECT_MESSAGES, DiscordJS.Intents.FLAGS.GUILD_MESSAGES] });
 global.discordAdmin = (typeof discordAdmin !== 'undefined') ? discordAdmin : null;
 
 export default class Discord {
@@ -73,7 +73,7 @@ export default class Discord {
 			let foundMessages = await message.channel.messages.fetch({ limit: 100 });
 			foundMessages = foundMessages.filter((elt) => elt.cleanContent === 'L.U.M.E.N online - awaiting orders');
 
-			console.log('Purging pm');
+			console.log(`Purging pm - ${foundMessages.size} found`);
 
 			if(foundMessages) {
 				foundMessages.map((elt) => elt.delete());
