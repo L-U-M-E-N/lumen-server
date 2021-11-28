@@ -39,7 +39,9 @@ export default class Discord {
 		}
 	}
 	static recievedMessage(message) {
-		log('[Discord] ' + message.channel.recipient.username + ': ' + message.cleanContent);
+		const username = (message.channel.recipient) ? message.channel.recipient.username : '???';
+
+		log('[Discord] ' + username + ': ' + message.cleanContent);
 
 		if(message.cleanContent.charAt(0) === '!') {
 			Discord.sendCommand(message);
