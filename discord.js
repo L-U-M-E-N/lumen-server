@@ -20,7 +20,7 @@ export default class Discord {
 				});
 		});
 
-		discordClient.on('message', (message) => Discord.recievedMessage(message));
+		discordClient.on('messageCreate', (message) => Discord.recievedMessage(message));
 
 		discordClient.on('error', console.error);
 
