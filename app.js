@@ -10,7 +10,7 @@ import Modules from './modules.js';
 
 moduleList = ['Database', ...moduleList.map((elt) => 'modules/' + elt + '/main.server')];
 
-if(discordAdminId && discordBotToken) {
+if(global.config.discord.adminId && global.config.discord.botToken) {
 	moduleList.unshift('Discord');
 }
 
@@ -43,7 +43,7 @@ if(debugMode) {
 autoLoad(function() {
 	log('SEEKING ADMIN ...');
 
-	if(discordAdminId && discordBotToken) {
+	if(global.config.discord.adminId && global.config.discord.botToken) {
 		Discord.connect(() => {
 			Discord.sendMessage(
 				'L.U.M.E.N online - awaiting orders'

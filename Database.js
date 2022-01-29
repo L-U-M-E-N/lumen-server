@@ -8,7 +8,7 @@ export default class Database {
 	static async init(callback) {
 		if(!!dbPool) { return; }
 
-		dbPool = new Pool(databaseAuth);
+		dbPool = new Pool(global.config.database);
 
 		try {
 			dbClient = await dbPool.connect();
