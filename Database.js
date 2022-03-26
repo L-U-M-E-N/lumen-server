@@ -67,6 +67,8 @@ export default class Database {
 		try {
 			return await dbClient.query(query, params);
 		} catch(err) {
+			console.error(err);
+
 			if(!!err.constraint && err.constraint.includes('_pkey')) {
 				return;
 			}
