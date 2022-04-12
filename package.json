@@ -3,7 +3,7 @@
   "dependencies": {
     "discord.js": "^13.6.0",
     "ical": "^0.8.0",
-    "pg": "^8.7.1"
+    "pg": "^8.7.3"
   },
   "scripts": {
     "start": "node app"
