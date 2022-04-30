@@ -1,8 +1,13 @@
 import pg from 'pg';
-const { Pool } = pg;
+const { Pool, types } = pg;
 
 global.dbPool = null;
 global.dbClient = null;
+
+// Fix for dates type
+types.setTypeParser(1082, function(stringValue) {
+	return new Date(stringValue + 'T00:00:00.000Z');
+});
 
 export default class Database {
 	static async init(callback) {
