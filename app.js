@@ -3,6 +3,8 @@
  */
 import ConsoleHelper from './console.js';
 global.log = ConsoleHelper.log;
+import getModuleName from './getModuleName.js';
+global.getModuleName = getModuleName;
 
 import './config.js';
 
