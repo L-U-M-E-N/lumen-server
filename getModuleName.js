@@ -1,5 +1,5 @@
-export default function getModuleName(depth = 1) {
-	const paths = (new Error().stack.split('at ')[depth + 1]).trim().split('/modules/');
+export default function getModuleName(depth = 0) {
+	const paths = (new Error().stack.split('at ')[depth + 2]).trim().split('/modules/');
 	let moduleName = 'core';
 	if(paths[1]) { // This is a module
 		moduleName = paths[1].split('/');

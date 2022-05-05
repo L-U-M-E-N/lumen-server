@@ -50,13 +50,12 @@ export default class ConsoleHelper {
 		return process.stdout.write('\x1Bc');
 	}
 	/**
-	 * Write a thing in console
+	 * Output someting in the console
 	 *
 	 * @param      {string}  text    The text to log
 	 * @param      {<type>}             type    The type of text (for color)
-	 * @param      {boolean}            nodate  Activate the date log ?
 	 */
-	static log (msg, type, nodate) {
+	static log (msg, type) {
 		let text = msg;
 		switch(type) {
 			case 'warn':
@@ -80,9 +79,7 @@ export default class ConsoleHelper {
 			default:
 		}
 
-		if(!nodate) {
-			text = ConsoleHelper.logdate() + '  ' + text;
-		}
+		text = ` ${getModuleName(1).padEnd(20, ' ')} ${ConsoleHelper.logdate()} ${text}`;
 
 		console.log(text);
 	}
