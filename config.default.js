@@ -4,41 +4,25 @@
  */
 
 /**
- * Global config
+ * Example config, weither here or in desktop config file
  */
-global.debugMode = true; // @ADD: Auto detected debug mode
-
-
-/**
- * Subprocesses
- */
-global.subprocessesList = {
-	//"example": { init: somefunction, file: somefile, fileopt: [], options: [], onerr: function, onclose: function, onstdout: function, },
+const config = {
+	desktopConfigLocation: '/path/to/my/file', // Optional: null, undefined or string
+	'discord': { // Optional
+		'adminId': 'string',
+		'botToken': 'string',
+		'pmChannel': 'string'
+	},
+	'database': { // Mandatory
+		'user': 'string',
+		'host': 'string',
+		'database': 'string',
+		'password': 'string',
+		'port': 'number'
+	},
+	subprocessesList: { // Optionnal, to start programs that are not lumen modules
+		//"example": { init: somefunction, file: somefile, fileopt: [], options: [], onerr: function, onclose: function, onstdout: function, },
+	}
 };
 
-/**
- * Database
- */
-global.databaseAuth = {
-	user: 'lumen',
-	host: 'localhost',
-	database: 'lumen',
-	password: 'PASSWORDHERE',
-	port: 5432,
-};
-
-/**
- * Discord
- */
-//global.discordAdminId = '';
-
-// The token of your bot - https://discordapp.com/developers/applications/me
-//global.discordBotToken = '';
-//global.discordPMChannel = '';
-
-/**
- * Modules
- */
-global.moduleList = [
-	// "Example"
-];
+export default config;

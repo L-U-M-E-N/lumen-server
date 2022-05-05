@@ -13,7 +13,7 @@ export default class Database {
 	static async init(callback) {
 		if(!!dbPool) { return; }
 
-		dbPool = new Pool(global.config.database);
+		dbPool = new Pool(config.database);
 
 		try {
 			dbClient = await dbPool.connect();
@@ -82,4 +82,4 @@ export default class Database {
 			console.log(params);
 		}
 	}
-};
+}

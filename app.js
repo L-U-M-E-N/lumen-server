@@ -1,19 +1,30 @@
+global.debugMode = true;
+
 /**
- * Modules
+ * Global methods/classes
  */
-import ConsoleHelper from './console.js';
-global.log = ConsoleHelper.log;
 import getModuleName from './getModuleName.js';
 global.getModuleName = getModuleName;
 
-import './config.js';
+import ConsoleHelper from './console.js';
+global.log = ConsoleHelper.log;
 
+import configManager from './configManager.js';
+Object.defineProperty(global, 'config', {
+	get() {
+		return configManager();
+	}
+});
+
+/**
+ * Modules
+ */
 import Modules from './modules.js';
 
-moduleList = ['Database', ...moduleList.map((elt) => 'modules/' + elt + '/main.server')];
+config.moduleList = ['Database', ...config.moduleList.map((elt) => 'modules/' + elt + '/main.server')];
 
-if(global.config.discord.adminId && global.config.discord.botToken) {
-	moduleList.unshift('Discord');
+if(config.discord && config.discord.adminId && config.discord.botToken) {
+	config.moduleList.unshift('Discord');
 }
 
 /**
@@ -45,7 +56,7 @@ if(debugMode) {
 autoLoad(function() {
 	log('SEEKING ADMIN ...');
 
-	if(global.config.discord.adminId && global.config.discord.botToken) {
+	if(config.discord.adminId && config.discord.botToken) {
 		Discord.connect(() => {
 			Discord.sendMessage(
 				'L.U.M.E.N online - awaiting orders'

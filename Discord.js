@@ -12,7 +12,7 @@ export default class Discord {
 			log('Connected to discord server bot');
 			discordClient.user.setActivity('Monitoring the world');
 
-			discordClient.users.fetch(global.config.discord.adminId)
+			discordClient.users.fetch(config.discord.adminId)
 				.then(user => {
 					discordAdmin = user;
 
@@ -24,7 +24,7 @@ export default class Discord {
 
 		discordClient.on('error', console.error);
 
-		discordClient.login(global.config.discord.botToken);
+		discordClient.login(config.discord.botToken);
 
 		return discordClient;
 	}
@@ -49,7 +49,7 @@ export default class Discord {
 	}
 
 	static async sendCommand(message) {
-		if(message.channel.id !== global.config.discord.pmChannel) {
+		if(message.channel.id !== config.discord.pmChannel) {
 			return;
 		}
 
