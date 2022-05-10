@@ -35,7 +35,6 @@ async function autoLoad(callback) {
 	log('./initialising.MODULES.ALL', 'boot');
 	await Modules.loadModules();
 
-	Modules.watch('config');
 	Modules.watch('modules');
 
 	log('./initialising.SUBPROCESS.ALL', 'boot');
@@ -65,6 +64,8 @@ autoLoad(function() {
 		});
 	}
 });
+
+setInterval(() => console.log('Logging test config:', config['test']), 2000);
 
 process.on('uncaughtException', err => {
 	console.error('There was an uncaught error', err);
