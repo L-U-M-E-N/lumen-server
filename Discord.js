@@ -1,7 +1,64 @@
 import DiscordJS from 'discord.js';
 
+import getModuleName from './getModuleName.js';
+
 global.discordClient = (typeof discordClient !== 'undefined') ? discordClient : new DiscordJS.Client({ intents: [DiscordJS.Intents.FLAGS.GUILDS, DiscordJS.Intents.FLAGS.DIRECT_MESSAGES, DiscordJS.Intents.FLAGS.GUILD_MESSAGES] });
 global.discordAdmin = (typeof discordAdmin !== 'undefined') ? discordAdmin : null;
+
+if(!global.discordCommands) {
+	global.discordCommands = {};
+}
+
+discordCommands['pm'] = {
+	moduleName: 'core',
+	fn: async(discordClient, message, words) => {
+		const recipient = await discordClient.users.fetch(words[1]);
+
+		if(!!recipient) {
+			words.shift();
+			words.shift();
+
+			recipient.send(words.join(' '));
+		}
+	}
+};
+
+discordCommands['delete'] = {
+	moduleName: 'core',
+	fn: async(discordClient, message, words) => {
+		const foundMessage = await message.channel.messages.fetch(words[1]);
+
+		console.log('Deleting ', words[1], foundMessage);
+
+		if(foundMessage) {
+			foundMessage.delete();
+		}
+	}
+};
+
+discordCommands['purge'] = {
+	moduleName: 'core',
+	fn: async(discordClient, message, words) => {
+		let foundMessages = await message.channel.messages.fetch({ limit: 100 });
+		let purgeString = 'L.U.M.E.N online - awaiting orders';
+
+		if(words[1] && words[1] !== '') {
+			purgeString = words[1];
+		}
+
+		foundMessages = foundMessages.filter((elt) => elt.cleanContent.includes(purgeString));
+
+		console.log(`Purging pm - ${foundMessages.size} found`);
+
+		if(foundMessages) {
+			foundMessages.map((elt) => {
+				try {
+					elt.delete();
+				} catch(e) { /* Do nothing */ }
+			});
+		}
+	}
+};
 
 export default class Discord {
 	/**
@@ -54,32 +111,27 @@ export default class Discord {
 		}
 
 		const words = message.cleanContent.split(' ');
-		if(words[0] === '!pm') {
-			const recipient = await discordClient.users.fetch(words[1]);
 
-			if(!!recipient) {
-				words.shift();
-				words.shift();
-
-				recipient.send(words.join(' '));
-			}
-		} else if(words[0] === '!delete') {
-			const foundMessage = await message.channel.messages.fetch(words[1]);
-
-			console.log('Deleting ', words[1], foundMessage);
-
-			if(foundMessage) {
-				foundMessage.delete();
-			}
-		} else if(words[0] === '!purge') {
-			let foundMessages = await message.channel.messages.fetch({ limit: 100 });
-			foundMessages = foundMessages.filter((elt) => elt.cleanContent === 'L.U.M.E.N online - awaiting orders');
-
-			console.log(`Purging pm - ${foundMessages.size} found`);
-
-			if(foundMessages) {
-				foundMessages.map((elt) => elt.delete());
+		if(discordCommands[words[0].slice(1, words[0].length)]) {
+			try {
+				discordCommands[words[0].slice(1, words[0].length)].fn(discordClient, message, words);
+			} catch(err) {
+				console.log(err);
 			}
 		}
+	}
+
+	static registerCmd(commandName, fn) {
+		const moduleName = getModuleName(1);
+
+		if(discordCommands[commandName] && discordCommands[commandName].moduleName !== moduleName) {
+			log(`Discord command ${commandName} already registered in module ${discordCommands[commandName].moduleName}`, 'error');
+			return;
+		}
+
+		discordCommands[commandName] = {
+			moduleName,
+			fn,
+		};
 	}
 }
