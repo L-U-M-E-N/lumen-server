@@ -8,6 +8,9 @@ global.discordAdmin = (typeof discordAdmin !== 'undefined') ? discordAdmin : nul
 if(!global.discordCommands) {
 	global.discordCommands = {};
 }
+if(!global.discordButtons) {
+	global.discordButtons = {};
+}
 
 discordCommands['pm'] = {
 	moduleName: 'core',
@@ -151,9 +154,17 @@ export default class Discord {
 			return;
 		}
 
-		if(discordCommands[interaction.commandName]) {
+		if(interaction.isCommand() && discordCommands[interaction.commandName]) {
 			try {
 				discordCommands[interaction.commandName].fn(discordClient, interaction);
+			} catch(err) {
+				console.log(err);
+			}
+		}
+
+		if(interaction.isButton() && discordButtons[interaction.component.customId]) {
+			try {
+				discordButtons[interaction.component.customId].fn(discordClient, interaction);
 			} catch(err) {
 				console.log(err);
 			}
@@ -172,6 +183,22 @@ export default class Discord {
 			moduleName,
 			fn,
 			...commandData
+		};
+
+		console.log(discordCommands[commandName]);
+	}
+
+	static registerBtn(commandName, fn) {
+		const moduleName = getModuleName(1);
+
+		if(discordButtons[commandName] && discordButtons[commandName].moduleName !== moduleName) {
+			log(`Discord command ${commandName} already registered in module ${discordButtons[commandName].moduleName}`, 'error');
+			return;
+		}
+
+		discordButtons[commandName] = {
+			moduleName,
+			fn
 		};
 	}
 
