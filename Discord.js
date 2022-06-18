@@ -11,53 +11,95 @@ if(!global.discordCommands) {
 
 discordCommands['pm'] = {
 	moduleName: 'core',
-	fn: async(discordClient, message, words) => {
-		const recipient = await discordClient.users.fetch(words[1]);
+	description: 'PM an user',
+	fn: async(discordClient, interaction) => {
+		const recipient = interaction.options.getUser('user');
 
 		if(!!recipient) {
-			words.shift();
-			words.shift();
-
-			recipient.send(words.join(' '));
+			recipient.send(interaction.options.getString('message'));
 		}
-	}
+
+		interaction.reply({
+			content: 'Sent !',
+			ephemeral: true
+		});
+	},
+	options: [
+		{
+			name: 'user',
+			type: 'USER',
+			description: 'The user to ping',
+			required: true,
+		},
+		{
+			name: 'message',
+			type: 'STRING',
+			description: 'The message to send',
+			required: true
+		}
+	]
 };
 
 discordCommands['delete'] = {
 	moduleName: 'core',
-	fn: async(discordClient, message, words) => {
-		const foundMessage = await message.channel.messages.fetch(words[1]);
+	description: 'Delete a specific message',
+	fn: async(discordClient, interaction) => {
+		const messageId = interaction.options.getString('message');
+		const foundMessage = await interaction.channel.messages.fetch(messageId);
 
-		console.log('Deleting ', words[1], foundMessage);
+		console.log('Deleting ', messageId, foundMessage);
 
 		if(foundMessage) {
-			foundMessage.delete();
+			try {
+				foundMessage.delete();
+				interaction.reply({ content: 'Done !', ephemeral: true });
+			} catch(e) {
+				interaction.reply({ content: e.message, ephemeral: true });
+			}
 		}
-	}
+	},
+	options: [{
+		name: 'message',
+		type: 'STRING',
+		description: 'Message id',
+		required: true
+	}]
 };
 
 discordCommands['purge'] = {
 	moduleName: 'core',
-	fn: async(discordClient, message, words) => {
-		let foundMessages = await message.channel.messages.fetch({ limit: 100 });
-		let purgeString = 'L.U.M.E.N online - awaiting orders';
+	description: 'Purge messages following a specific pattern, default: "L.U.M.E.N online - awaiting orders"',
+	fn: async(discordClient, interaction) => {
+		try {
+			let foundMessages = await interaction.channel.messages.fetch({ limit: 100 });
+			let purgeString = interaction.options.getString('content') || 'L.U.M.E.N online - awaiting orders';
 
-		if(words[1] && words[1] !== '') {
-			purgeString = words[1];
+			foundMessages = foundMessages.filter((elt) => elt.cleanContent.includes(purgeString));
+
+			let msg = `Purging pm - ${foundMessages.size} found`;
+			console.log(msg);
+			interaction.reply({ content: msg, ephemeral: true });
+
+			if(foundMessages) {
+				foundMessages.map((elt) => {
+					try {
+						elt.delete();
+					} catch(e) {
+						interaction.reply({ content: e.message, ephemeral: true });
+					}
+				});
+			}
+		} catch(e) {
+			interaction.reply({ content: e.message, ephemeral: true });
 		}
-
-		foundMessages = foundMessages.filter((elt) => elt.cleanContent.includes(purgeString));
-
-		console.log(`Purging pm - ${foundMessages.size} found`);
-
-		if(foundMessages) {
-			foundMessages.map((elt) => {
-				try {
-					elt.delete();
-				} catch(e) { /* Do nothing */ }
-			});
+	},
+	options: [
+		{
+			name: 'content',
+			type: 'STRING',
+			description: 'Message content to search for',
 		}
-	}
+	]
 };
 
 export default class Discord {
@@ -81,6 +123,8 @@ export default class Discord {
 
 		discordClient.on('error', console.error);
 
+		discordClient.on('interactionCreate', Discord.interactionCreated);
+
 		discordClient.login(config.discord.botToken);
 
 		return discordClient;
@@ -99,22 +143,17 @@ export default class Discord {
 		const username = (message.channel.recipient) ? message.channel.recipient.username : '???';
 
 		log('[Discord] ' + username + ': ' + message.cleanContent);
-
-		if(message.cleanContent.charAt(0) === '!') {
-			Discord.sendCommand(message);
-		}
 	}
 
-	static async sendCommand(message) {
-		if(message.channel.id !== config.discord.pmChannel) {
+	static interactionCreated(interaction) {
+		if(interaction.channel.id !== config.discord.pmChannel || interaction.user.id !== config.discord.adminId) {
+			log(`[Discord] Someone tried to execute outside of Elanis/LUMEN channel ! ${interaction.user.id}`)
 			return;
 		}
 
-		const words = message.cleanContent.split(' ');
-
-		if(discordCommands[words[0].slice(1, words[0].length)]) {
+		if(discordCommands[interaction.commandName]) {
 			try {
-				discordCommands[words[0].slice(1, words[0].length)].fn(discordClient, message, words);
+				discordCommands[interaction.commandName].fn(discordClient, interaction);
 			} catch(err) {
 				console.log(err);
 			}
@@ -133,5 +172,15 @@ export default class Discord {
 			moduleName,
 			fn,
 		};
+	}
+
+	static registerCommands() {
+		const commandsList = Object.keys(discordCommands).map((cmd) => ({
+			name: cmd,
+			description: discordCommands[cmd].moduleName + ' - ' + (discordCommands[cmd].description || '?'),
+			options: discordCommands[cmd].options || []
+		}));
+
+		const command = discordClient.application?.commands.set(commandsList);
 	}
 }

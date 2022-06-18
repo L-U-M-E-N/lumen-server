@@ -60,6 +60,7 @@ autoLoad(function() {
 			Discord.sendMessage(
 				'L.U.M.E.N online - awaiting orders'
 			);
+			Discord.registerCommands();
 			log('ADMIN FOUND');
 		});
 	}
