@@ -160,7 +160,7 @@ export default class Discord {
 		}
 	}
 
-	static registerCmd(commandName, fn) {
+	static registerCmd(commandName, fn, commandData = {}) {
 		const moduleName = getModuleName(1);
 
 		if(discordCommands[commandName] && discordCommands[commandName].moduleName !== moduleName) {
@@ -171,6 +171,7 @@ export default class Discord {
 		discordCommands[commandName] = {
 			moduleName,
 			fn,
+			...commandData
 		};
 	}
 
