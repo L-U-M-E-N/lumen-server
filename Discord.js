@@ -105,6 +105,21 @@ discordCommands['purge'] = {
 	]
 };
 
+discordCommands['reboot'] = {
+	moduleName: 'core',
+	description: 'Reboot a module',
+	fn: async(discordClient, interaction) => {
+		Modules.reloadModule(interaction.options.getString('module'));
+	},
+	options: [
+		{
+			name: 'module',
+			type: 'STRING',
+			description: 'Module you want to reboot',
+		}
+	]
+}
+
 export default class Discord {
 	/**
 	 * Connect to discord server, and listen messages
