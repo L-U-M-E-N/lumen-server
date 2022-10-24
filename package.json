@@ -3,6 +3,7 @@
   "dependencies": {
     "discord.js": "^14.6.0",
     "ical": "^0.8.0",
+    "node-fetch": "^3.2.10",
     "pg": "^8.8.0"
   },
   "scripts": {
