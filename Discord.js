@@ -1,8 +1,8 @@
-import DiscordJS from 'discord.js';
+import { ApplicationCommandOptionType, Client, GatewayIntentBits } from 'discord.js';
 
 import getModuleName from './getModuleName.js';
 
-global.discordClient = (typeof discordClient !== 'undefined') ? discordClient : new DiscordJS.Client({ intents: [DiscordJS.Intents.FLAGS.GUILDS, DiscordJS.Intents.FLAGS.DIRECT_MESSAGES, DiscordJS.Intents.FLAGS.GUILD_MESSAGES] });
+global.discordClient = (typeof discordClient !== 'undefined') ? discordClient : new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildMessages] });
 global.discordAdmin = (typeof discordAdmin !== 'undefined') ? discordAdmin : null;
 
 if(!global.discordCommands) {
@@ -30,13 +30,13 @@ discordCommands['pm'] = {
 	options: [
 		{
 			name: 'user',
-			type: 'USER',
+			type: ApplicationCommandOptionType.User,
 			description: 'The user to ping',
 			required: true,
 		},
 		{
 			name: 'message',
-			type: 'STRING',
+			type: ApplicationCommandOptionType.String,
 			description: 'The message to send',
 			required: true
 		}
@@ -63,7 +63,7 @@ discordCommands['delete'] = {
 	},
 	options: [{
 		name: 'message',
-		type: 'STRING',
+		type: ApplicationCommandOptionType.String,
 		description: 'Message id',
 		required: true
 	}]
@@ -99,7 +99,7 @@ discordCommands['purge'] = {
 	options: [
 		{
 			name: 'content',
-			type: 'STRING',
+			type: ApplicationCommandOptionType.String,
 			description: 'Message content to search for',
 		}
 	]
@@ -114,7 +114,7 @@ discordCommands['reboot'] = {
 	options: [
 		{
 			name: 'module',
-			type: 'STRING',
+			type: ApplicationCommandOptionType.String,
 			description: 'Module you want to reboot',
 		}
 	]
