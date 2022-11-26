@@ -109,7 +109,7 @@ discordCommands['reboot'] = {
 	moduleName: 'core',
 	description: 'Reboot a module',
 	fn: async(discordClient, interaction) => {
-		Modules.reloadModule(interaction.options.getString('module'));
+		reloadModule(interaction.options.getString('module'));
 	},
 	options: [
 		{

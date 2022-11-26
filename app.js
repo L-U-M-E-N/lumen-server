@@ -20,6 +20,7 @@ Object.defineProperty(global, 'config', {
  * Modules
  */
 import Modules from './modules.js';
+global.reloadModule = Modules.reloadModule;
 
 config.moduleList = ['Database', ...config.moduleList.map((elt) => 'modules/' + elt + '/main.server')];
 
