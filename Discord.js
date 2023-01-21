@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, Client, GatewayIntentBits } from 'discord.js';
+import { ApplicationCommandOptionType, Client, GatewayIntentBits, PermissionsBitField } from 'discord.js';
 
 import getModuleName from './getModuleName.js';
 
@@ -221,7 +221,9 @@ export default class Discord {
 		const commandsList = Object.keys(discordCommands).map((cmd) => ({
 			name: cmd,
 			description: discordCommands[cmd].moduleName + ' - ' + (discordCommands[cmd].description || '?'),
-			options: discordCommands[cmd].options || []
+			options: discordCommands[cmd].options || [],
+			dmPermission: true,
+			defaultMemberPermissions: PermissionsBitField.Flags.Administrator,
 		}));
 
 		const command = discordClient.application?.commands.set(commandsList);
