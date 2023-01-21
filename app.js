@@ -1,5 +1,3 @@
-global.debugMode = true;
-
 /**
  * Global methods/classes
  */
@@ -49,7 +47,7 @@ ConsoleHelper.consoleReset();
 // Autoloading modules
 log('./action.SYSTEM.REBOOT', 'boot');
 
-if(debugMode) {
+if(DEBUG) {
 	log('./initialising.DEBUG.MODE', 'boot');
 }
 

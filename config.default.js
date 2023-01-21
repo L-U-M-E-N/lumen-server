@@ -2,6 +2,7 @@
  * DEFAULT CONFIGURATION FILE
  * YOU MUST COPY AND COMPLETE IT AS config.js
  */
+global.DEBUG = false;
 
 /**
  * Example config, either here or in desktop config file
