@@ -4,7 +4,7 @@
  */
 
 /**
- * Example config, weither here or in desktop config file
+ * Example config, either here or in desktop config file
  */
 const config = {
 	desktopConfigLocation: '/path/to/my/file', // Optional: null, undefined or string
