@@ -14,9 +14,20 @@ Object.defineProperty(global, 'config', {
 	}
 });
 
+process.on('uncaughtException', err => {
+	console.error('There was an uncaught error', err);
+	process.exit(1); //mandatory (as per the Node.js docs)
+});
+
 /**
  * Modules
  */
+import ModuleDownloader from './moduleDownloader.js';
+if(await ModuleDownloader.downloadModules()) {
+	log('./initialising.MODULES.POSTDOWNLOAD.REBOOT', 'boot');
+	process.exit();
+}
+
 import Modules from './modules.js';
 global.reloadModule = Modules.reloadModule;
 
@@ -63,9 +74,4 @@ autoLoad(function() {
 			log('ADMIN FOUND');
 		});
 	}
-});
-
-process.on('uncaughtException', err => {
-	console.error('There was an uncaught error', err);
-	process.exit(1); //mandatory (as per the Node.js docs)
 });
