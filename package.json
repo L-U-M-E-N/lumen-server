@@ -5,6 +5,9 @@
     "pg": "^8.8.0"
   },
   "scripts": {
-    "start": "node app"
+    "start": "nodemon app"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
   }
 }
