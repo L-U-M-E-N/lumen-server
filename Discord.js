@@ -199,8 +199,6 @@ export default class Discord {
 			fn,
 			...commandData
 		};
-
-		console.log(discordCommands[commandName]);
 	}
 
 	static registerBtn(commandName, fn) {
