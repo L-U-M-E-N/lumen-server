@@ -9,6 +9,6 @@
     "start-dev": "nodemon app"
   },
   "devDependencies": {
-    "nodemon": "^2.0.22"
+    "nodemon": "^3.0.1"
   }
 }
