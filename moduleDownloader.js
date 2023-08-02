@@ -97,7 +97,7 @@ export default class ModuleDownloader {
 			execSync('npm i');
 		}
 
-		const configModuleList = config.modules.map(x => x.name);
+		const configModuleList = config.modules.filter(x => x.server).map(x => x.name);
 		for(const moduleName of directoryList) {
 			console.log('moduleName:', moduleName);
 			if(!configModuleList.includes(moduleName)) {
