@@ -2,7 +2,7 @@
   "type": "module",
   "dependencies": {
     "discord.js": "^14.19.3",
-    "pg": "^8.15.6"
+    "pg": "^8.16.0"
   },
   "scripts": {
     "start": "node app",
