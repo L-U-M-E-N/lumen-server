@@ -1,7 +1,7 @@
 {
   "type": "module",
   "dependencies": {
-    "discord.js": "^14.24.2",
+    "discord.js": "^14.25.1",
     "pg": "^8.16.3"
   },
   "scripts": {
@@ -9,6 +9,6 @@
     "start-dev": "nodemon app"
   },
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.11"
   }
 }
