@@ -1,7 +1,7 @@
 {
   "type": "module",
   "dependencies": {
-    "discord.js": "^14.26.4",
+    "discord.js": "^14.26.5",
     "pg": "^8.22.0"
   },
   "scripts": {
